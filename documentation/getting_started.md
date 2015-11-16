@@ -111,9 +111,10 @@ you'll need to have a GCP project setup. If you've already got one,
 please skip to the next step. Otherwise, please follow the
 instructions below.
 
-Sign into the [Google Developer's
+Sign into the [Google Developers
 Console](https://console.devleopers.google.com) and create a
-project. Call it <code>MySpinnakerProject</code>.
+project. Give it a `Project Name` of <code>MySpinnakerProject</code> and take
+note of the auto-generated `project ID` (e.g. *powerful-surf-12345*).
 
 1. Enable APIs in the <code>MySpinnakerProject</code> project.
   * Go to the API Management page.
@@ -130,7 +131,9 @@ project. Call it <code>MySpinnakerProject</code>.
     name of the file for you. Keep track of the name of the file and
     where it gets downloaded. You'll need this information in [Step
     3](#step-3-update-the-spinnaker-configuration-file).
-  * <code>chmod 400</code> this file.
+  * Make sure this file is readable/writable only by you since it contains
+    authorization credentials for your GCP project.  On Linux, you can use
+    <code>chmod 400 FILENAME</code> on your file.
 
 ## Step 2: Set up a virtual machine to run Spinnaker
 
@@ -190,7 +193,15 @@ tool.
 
         gcloud auth login
 
-1. Create a Google Compute Engine virtual machine.
+1. To simplify your <code>gcloud</code> commands, it can be useful to set
+   optional defaults.  For example, if your project ID is *powerful-surf-12345*
+   you can set this as your default project and zone with these two commands,
+
+        gcloud config set project powerful-surf-12345
+        gcloud config set compute/zone us-central1-f
+
+1. Create a Google Compute Engine virtual machine. This command assumes you
+   set the <code>gcloud</code> defaults above.
 
         gcloud compute instances create spinnaker-test --image ubuntu-14-04 --machine-type n1-highmem-8 --scopes compute-rw
 
@@ -214,10 +225,12 @@ components, including Redis and Cassandra, which Spinnaker components
 use to store data. Note that it can take several minutes for Spinnaker
 to start.
 
-After a few minutes, point your browser at <code>localhost:8081</code>
-if Spinnaker is running in an AWS virtual machine and
-<code>localhost:9000</code> if Spinnaker is running on a Google
-Compute Engine virtual machine.
+It will take several minutes to install and configure Spinnaker along with
+all of it's dependencies. Once the install is complete, you will use your
+browser to interact with Spinnaker's UI. If you are running Spinnaker on AWS,
+point your browser at [http://localhost:8081](http://localhost:8081).
+Or, if you are running Spinnaker on GCP use
+[http://localhost:9000](http://localhost:9000) instead.
 
 ## Step 4. Configure example pipeline
 
